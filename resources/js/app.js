@@ -7,7 +7,6 @@ import routes from './routes';
 import store from './store';
 import Snotify, {SnotifyPosition} from 'vue-snotify';
 import 'vue-snotify/styles/material.css';
-import axios from 'axios';
 
 Vue.use(VueRouter);
 Vue.use(Snotify, {

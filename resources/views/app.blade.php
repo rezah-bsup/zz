@@ -8,7 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <!-- CSRF Token -->
-    <meta name="csrt-token" content="{{csrf_token()}}">
+    <meta name="csrf-token" content="{{csrf_token()}}">
 
     <meta name="description" content="">
     <meta name="author" content="">
@@ -33,13 +33,13 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <router-link class="navbar-brand" :to="{name:'home'}" >Reza Simple Blog</router-link>
+            <router-link class="navbar-brand" :to="{name:'home'}">Reza Simple Blog</router-link>
         </div>
         <!-- Top Menu Items -->
         <ul class="nav navbar-right top-nav">
 
             <li class="dropdown">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user"></i> نام مدیر <b
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user"></i> {{$user->name}} <b
                             class="caret"></b></a>
                 <ul class="dropdown-menu">
                     <li>
@@ -50,7 +50,9 @@
                     </li>
                     <li class="divider"></li>
                     <li>
-                        <form action="/logout" method="post">@csrf<input type="submit" value="خروج"><i class="fa fa-fw fa-power-off"></i> </form>>
+                        <form action="/logout" method="post">@csrf<input type="submit" value="خروج"><i
+                                    class="fa fa-fw fa-power-off"></i></form>
+                        >
                     </li>
                 </ul>
             </li>
@@ -59,7 +61,7 @@
         <div class="collapse navbar-collapse navbar-ex1-collapse">
             <ul class="nav navbar-nav side-nav">
                 <li>
-                    <router-link to=""><i class="fa fa-fw fa-dashboard"></i>داشبورد</router-link>
+                    <router-link :to="{name:'home'}"><i class="fa fa-fw fa-dashboard"></i>داشبورد</router-link>
                 </li>
                 <li>
                     <a href="javascript:;" data-toggle="collapse" data-target="#users"><i class="fa fa-fw fa-users"></i>
@@ -69,7 +71,7 @@
                             <router-link :to="{name:'users'}">لیست کاربرها</router-link>
                         </li>
                         <li>
-                            <a href="#">افزودن کاربر</a>
+                            <router-link :to="{name:'create_user'}">افزودن کاربر</router-link>
                         </li>
                     </ul>
                 </li>

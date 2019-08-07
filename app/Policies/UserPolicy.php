@@ -16,7 +16,7 @@ class UserPolicy
      * @param \App\User $model
      * @return mixed
      */
-    public function view(User $user, User $model)
+    public function view(User $user)
     {
         return $user->role === User::ADMIN_ROLE;
     }
@@ -29,7 +29,7 @@ class UserPolicy
      */
     public function create(User $user)
     {
-        //
+        return $user->role === User::ADMIN_ROLE;
     }
 
     /**
@@ -41,7 +41,7 @@ class UserPolicy
      */
     public function update(User $user, User $model)
     {
-        //
+        return $user->role === User::ADMIN_ROLE;
     }
 
     /**
@@ -53,7 +53,7 @@ class UserPolicy
      */
     public function delete(User $user, User $model)
     {
-        //
+        return $user->role === User::ADMIN_ROLE;
     }
 
     /**

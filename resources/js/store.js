@@ -8,6 +8,10 @@ export default new Vuex.Store({
     modules: {Users},
     state: {},
     getters: {},
-    mutations: {},
+    mutations: {
+        setErrors(state, error) {
+            state.errors = error
+        }
+    },
     actions: {}
 });

@@ -56464,10 +56464,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vue_snotify__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! vue-snotify */ "./node_modules/vue-snotify/vue-snotify.esm.js");
 /* harmony import */ var vue_snotify_styles_material_css__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! vue-snotify/styles/material.css */ "./node_modules/vue-snotify/styles/material.css");
 /* harmony import */ var vue_snotify_styles_material_css__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(vue_snotify_styles_material_css__WEBPACK_IMPORTED_MODULE_6__);
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_7__);
 __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
-
 
 
 
@@ -56676,7 +56673,8 @@ var state = {
   roles: {
     admin: 'admin',
     user: 'user'
-  }
+  },
+  errors: {}
 };
 var mutations = {
   setUser: function setUser(state, user) {
@@ -56701,6 +56699,49 @@ var actions = {
       axios__WEBPACK_IMPORTED_MODULE_0___default.a.get('/users').then(function (result) {
         resolve(result);
       })["catch"](function (error) {
+        reject(error.response && error.response.data.message || 'Error.');
+      });
+    });
+  },
+  addUser: function addUser(_ref3, user) {
+    var commit = _ref3.commit;
+    return new Promise(function (resolve, reject) {
+      axios__WEBPACK_IMPORTED_MODULE_0___default.a.post('/users/store', user).then(function (result) {
+        resolve(result);
+      })["catch"](function (error) {
+        commit('setErrors', error.response.data.errors);
+        reject(error.response && error.response.data.message || 'Error.');
+      });
+    });
+  },
+  getUserWithId: function getUserWithId(_ref4, user_id) {
+    var commit = _ref4.commit;
+    return new Promise(function (resolve, reject) {
+      axios__WEBPACK_IMPORTED_MODULE_0___default.a.get('/users/' + user_id).then(function (result) {
+        resolve(result);
+      })["catch"](function (error) {
+        reject(error.response && error.response.data.message || 'Error.');
+      });
+    });
+  },
+  updateUser: function updateUser(_ref5, user) {
+    var commit = _ref5.commit;
+    return new Promise(function (resolve, reject) {
+      axios__WEBPACK_IMPORTED_MODULE_0___default.a.patch('/users/' + user.id, user).then(function (result) {
+        resolve(result);
+      })["catch"](function (error) {
+        commit('setErrors', error.response.data.errors);
+        reject(error.response && error.response.data.message || 'Error.');
+      });
+    });
+  },
+  deleteUser: function deleteUser(_ref6, user) {
+    var commit = _ref6.commit;
+    return new Promise(function (resolve, reject) {
+      axios__WEBPACK_IMPORTED_MODULE_0___default.a["delete"]('/users/' + user.id, user).then(function (result) {
+        resolve(result);
+      })["catch"](function (error) {
+        commit('setErrors', error.response.data.errors);
         reject(error.response && error.response.data.message || 'Error.');
       });
     });
@@ -56732,6 +56773,14 @@ var Users = function Users() {
   return __webpack_require__.e(/*! import() */ 1).then(__webpack_require__.bind(null, /*! ./components/users/Index.vue */ "./resources/js/components/users/Index.vue"));
 };
 
+var CreateUser = function CreateUser() {
+  return __webpack_require__.e(/*! import() */ 4).then(__webpack_require__.bind(null, /*! ./components/users/AddOrEdit.vue */ "./resources/js/components/users/AddOrEdit.vue"));
+};
+
+var ShowUser = function ShowUser() {
+  return __webpack_require__.e(/*! import() */ 3).then(__webpack_require__.bind(null, /*! ./components/users/Show.vue */ "./resources/js/components/users/Show.vue"));
+};
+
 var routes = [{
   path: '/',
   name: 'home',
@@ -56740,6 +56789,18 @@ var routes = [{
   path: '/users',
   name: 'users',
   component: Users
+}, {
+  name: 'create_user',
+  path: '/users/create',
+  component: CreateUser
+}, {
+  name: 'edit_user',
+  path: '/users/edit/:id',
+  component: CreateUser
+}, {
+  name: 'user-info',
+  path: '/user/:id',
+  component: ShowUser
 }];
 /* harmony default export */ __webpack_exports__["default"] = (routes);
 
@@ -56768,7 +56829,11 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vuex__WEBPACK_IMPORTED_MODULE_1__
   },
   state: {},
   getters: {},
-  mutations: {},
+  mutations: {
+    setErrors: function setErrors(state, error) {
+      state.errors = error;
+    }
+  },
   actions: {}
 }));
 

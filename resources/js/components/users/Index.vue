@@ -29,19 +29,19 @@
                            v-else></i>
                     </td>
                     <td>
-                        <router-link to="" v-if="user.id">
+                        <router-link :to="{name:'user-info',params:{id:user.id}}" v-if="user.id">
                             <button type="button" class="btn btn-outline-success btn-sm mr-2"
                                     v-if="user.id">
                                 <i class="fa fa-search-plus"></i>
                             </button>
                         </router-link>
-                        <router-link to="">
+                        <router-link :to="{name:'edit_user',params:{id:user.id}}">
                             <button type="button" class="btn btn-outline-primary btn-sm mr-2"
                                     v-if="user.id">
                                 <i class="fa fa-pencil"></i>
                             </button>
                         </router-link>
-                        <button type="button" class="btn btn-outline-danger btn-sm">
+                        <button @click="deleteUser(user)" type="button" class="btn btn-outline-danger btn-sm">
                             <i class="fa fa-trash"></i></button>
                     </td>
                 </tr>
@@ -51,13 +51,12 @@
 
 
         <div class="btn-toolbar" style='display:flex; justify-content:center;'>
-
             <div class="btn-group">
                 <button :disabled="!links.prev" class="btn btn-dark" @click.stop="loadFirst">
-                    first
+                    اولین
                 </button>
                 <button @click="loadPrev" :disabled="!links.prev" class="btn btn-dark">
-                    previous
+                    قبلی
                 </button>
             </div>
 
@@ -69,14 +68,13 @@
 
             <div class="btn-group">
                 <button @click="loadNext" :disabled="!links.next" class="btn btn-dark">
-                    next
+                    بعدی
                 </button>
                 <button :disabled="!links.next" class="btn btn-dark" @click="loadLast">
-                    last
+                    آخرین
                 </button>
             </div>
-
-
+            <i v-if="working" class="fa fa-cog" style="margin-top: 9px;"></i>
         </div>
     </div>
 </template>
@@ -85,14 +83,15 @@
     export default {
         data() {
             return {
-                working:true,
+                working: false,
                 users: {},
                 meta: {},
-                links:{},
+                links: {},
             }
         },
         methods: {
             loadData(url) {
+                this.working = true;
                 return new Promise((resolve, reject) => {
                     axios
                         .get(url)
@@ -111,14 +110,26 @@
             loadFirst() {
                 this.loadData(this.links.first);
             },
-            loadLast(){
+            loadLast() {
                 this.loadData(this.links.last);
             },
-            loadPrev(){
+            loadPrev() {
                 this.loadData(this.links.prev);
             },
-            loadNext(){
+            loadNext() {
                 this.loadData(this.links.next);
+            },
+            deleteUser(user){
+                this.$store.dispatch('deleteUser', user)
+                    .then(result => {
+                        this.$router.push({name: 'users'});
+                        this.$snotify.success(result.data && result.data.message);
+                        this.loadFirst();
+                    })
+                    .catch(error => {
+                        this.errors = this.$store.state.errors;
+                        this.$snotify.error(error);
+                    });
             }
         },
         created() {
@@ -131,10 +142,13 @@
                 .catch(error => {
                     this.$snotify.error(error);
                 });
-        }
+        },
+
     }
 </script>
 
 <style scoped>
-
+    displayNone {
+        display: none !important;
+    }
 </style>
